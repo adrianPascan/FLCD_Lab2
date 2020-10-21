@@ -85,6 +85,23 @@ public class SymbolTableImpl implements SymbolTable {
     }
 
     private static int nextCapacity(int capacity) {
-        return capacity * 2;
+        int newCapacity = capacity * 2 + 1;
+        while (!isPrime(newCapacity)) {
+            newCapacity += 2;
+        }
+        return newCapacity;
+    }
+
+    private static boolean isPrime(int no) {
+        if (no < 2 || (no != 2 && no % 2 == 0)) {
+            return false;
+        }
+        for (int oddDivisor = 3; oddDivisor * oddDivisor <= no; oddDivisor += 2) {
+            if (no % oddDivisor == 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
