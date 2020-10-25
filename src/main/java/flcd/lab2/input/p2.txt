@@ -3,16 +3,16 @@ int main ( )
 	int no = 0 ;
 	int divisor = 0 ;
 	read no ;
-	if (no lessThan 2) {
+	if ( no lessThan 2 ) {
 		write false ;
 		return 0 ;
     }
-	if (no equals 2) {
+	if ( no equals 2 ) {
 		write true ;
         return 0 ;
 	}
 	for ( divisor = 3 ; divisor * divisor lessEqual no ; divisor = divisor + 2 ) {
-		if (no % divisor == 0 ) {
+		if ( no % divisor equals 0 ) {
 			write false ;
             return 0 ;
 		}

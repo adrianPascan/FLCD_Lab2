@@ -1,12 +1,28 @@
 package flcd.lab2.PIF;
 
-import flcd.lab2.symbolTable.SymbolTable;
+import lombok.Getter;
+import lombok.ToString;
 
-import java.util.Map;
+import java.util.*;
 
-public interface PIF {
-    int add(String token);
-    Map<String, Integer> getTokensToReservedCode();
-    Map<String, Integer> getTokensToPositionInST();
-    SymbolTable getSymbolTable();
+@Getter
+@ToString
+public class PIF {
+    private List<PIFEntry> pifEntries;
+
+    public PIF() {
+        pifEntries = new ArrayList<>();
+    }
+
+    public void generate(String token, int index) {
+        pifEntries.add(new PIFEntry(token, index));
+    }
+
+    public String toPrintable() {
+        return "PIF: \n[" +
+                pifEntries.stream()
+                        .map(pifEntry -> pifEntry.getToken() + " ->  " + pifEntry.getIndex())
+                        .reduce("", (accumulator, pifEntryString) -> accumulator += "\n\t" + pifEntryString) +
+                "\n]\n";
+    }
 }

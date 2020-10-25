@@ -1,6 +1,6 @@
 int main ( )
 {
-	int no = ~ ;
+	int no = 0 ;
 	int no2 = 0 ;
 	int no3 = 0 ;
 	int 0minimum = 0 ;
