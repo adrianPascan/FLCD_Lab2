@@ -15,10 +15,7 @@ public class LexicalAnalyser {
     private PIF pif;
     private IdentifierSymbolTable identifierSymbolTable;
     private ConstantSymbolTable constantSymbolTable;
-
     private Map<String, Integer> reservedTokenToCode;
-
-    private String outputDirectoryPath;
 
     public LexicalAnalyser(String reservedTokenFilePath) {
         pif = null;
@@ -29,6 +26,10 @@ public class LexicalAnalyser {
     }
 
     public void scanning(String fileName, String programDirectoryPath, String outputDirectoryPath) {
+        pif = null;
+        identifierSymbolTable = null;
+        constantSymbolTable = null;
+
         try {
             List<LAEntry> laEntries = detectTokens(programDirectoryPath + "/" + fileName);
             classifyAndCodifyTokens(laEntries);
@@ -40,10 +41,34 @@ public class LexicalAnalyser {
         }
     }
 
+    private static List<LAEntry> detectTokens(String programFilePath) {
+        List<LAEntry> laEntries = new ArrayList<>();
+
+        try {
+            File file = new File(programFilePath);
+            Scanner scanner = new Scanner(file);
+
+            int lineNo = 0;
+            while (scanner.hasNextLine()) {
+                lineNo++;
+                String line = scanner.nextLine();
+
+                String[] lineTokens = line.strip().split(" ");
+                for (String lineToken : lineTokens) {
+                    laEntries.add(new LAEntry(lineToken, lineNo));
+                }
+            }
+        } catch (FileNotFoundException exception) {
+            exception.printStackTrace();
+        }
+
+        return laEntries;
+    }
+
     private void classifyAndCodifyTokens(List<LAEntry> laEntries) throws LexicalError {
-        pif = new PIF();
-        identifierSymbolTable = new IdentifierSymbolTable();
-        constantSymbolTable = new ConstantSymbolTable();
+        PIF pif = new PIF();
+        IdentifierSymbolTable identifierSymbolTable = new IdentifierSymbolTable();
+        ConstantSymbolTable constantSymbolTable = new ConstantSymbolTable();
 
         for (LAEntry laEntry : laEntries) {
             if (reservedTokenToCode.containsKey(laEntry.getToken())) {
@@ -68,6 +93,10 @@ public class LexicalAnalyser {
                         + "' cannot be classified (line " + laEntry.getLine() + ")");
             }
         }
+
+        this.pif = pif;
+        this.identifierSymbolTable = identifierSymbolTable;
+        this.constantSymbolTable = constantSymbolTable;
     }
 
     private static boolean isIdentifier(String token) {
@@ -88,31 +117,6 @@ public class LexicalAnalyser {
         }
 
         return true;
-    }
-
-
-    private static List<LAEntry> detectTokens(String programFilePath) {
-        List<LAEntry> laEntries = new ArrayList<>();
-
-        try {
-            File file = new File(programFilePath);
-            Scanner scanner = new Scanner(file);
-
-            int lineNo = 0;
-            while (scanner.hasNextLine()) {
-                lineNo++;
-                String line = scanner.nextLine();
-
-                String[] lineTokens = line.strip().split(" ");
-                for (String lineToken : lineTokens) {
-                    laEntries.add(new LAEntry(lineToken, lineNo));
-                }
-            }
-        } catch (FileNotFoundException exception) {
-            exception.printStackTrace();
-        }
-
-        return laEntries;
     }
 
     private void output(String fileName, String outputDirectoryPath) {
