@@ -13,7 +13,7 @@ Constant ST:
 	Hash Table: 
 	[
 		capacity= 11
-		noOfElements= 3
-		elements=[null, null, null, null, 0, null, 2, 3, null, null, null]
+		noOfElements= 4
+		elements=[null, null, null, null, 0, 1, 2, 3, null, null, null]
 	]
 ]

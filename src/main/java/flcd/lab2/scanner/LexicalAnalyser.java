@@ -112,7 +112,7 @@ public class LexicalAnalyser {
         }
 
         // string constant
-        if ( !(token.startsWith("\"") && token.endsWith("\"")) ) {
+        if ( !(token.startsWith("\"") && token.endsWith("\"")) || !token.matches("[a-zA-Z0-9 _.,:;!?'#]*")) {
             return false;
         }
 
