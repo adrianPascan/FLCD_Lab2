@@ -20,7 +20,7 @@ public class FAConsole {
         while (!command.equals("0")) {
             System.out.println(menu);
             try {
-                command = readCommand(scanner);
+                command = readLine();
                 commands.get(command).run();
             } catch (NullPointerException npe) {
                 System.out.println("Invalid command..");
@@ -28,10 +28,9 @@ public class FAConsole {
         }
     }
 
-
-
-    private String readCommand(Scanner scanner) {
+    private String readLine() {
         System.out.println("\t >> ");
+        Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
 
@@ -44,11 +43,13 @@ public class FAConsole {
     }
 
     private void transitionsCommand() {
-        fa.getTransitions().forEach((transitionInput, output) -> {
-            System.out.println(String.format(
-                    "\tdelta(%s, %s)= %s",
-                    transitionInput.getState(), transitionInput.getSymbol(), output
-            ));
+        fa.getTransitions().forEach((transitionInput, transitionOutput) -> {
+            transitionOutput.getStates().forEach(output -> {
+                System.out.println(String.format(
+                        "\tdelta(%s, %s)= %s",
+                        transitionInput.getState(), transitionInput.getSymbol(), output
+                ));
+            });
         });
     }
 
@@ -58,6 +59,13 @@ public class FAConsole {
 
     private void finalStatesCommand() {
         System.out.println("\t" + fa.getFinalStates());
+    }
+
+    private void isAcceptedCommand() {
+        System.out.println("Sequence:");
+        String sequence = readLine();
+
+        System.out.println((fa.isAccepted(sequence) ? "" : "NOT ") + "accepted");
     }
 
     private void exitCommand() {
@@ -74,18 +82,20 @@ public class FAConsole {
         commands.put("3", this::transitionsCommand);
         commands.put("4", this::initialStateCommand);
         commands.put("5", this::finalStatesCommand);
+        commands.put("6", this::isAcceptedCommand);
 
         return commands;
     }
 
     private String getMenu() {
-        return "_________________\n" +
+        return "_________________________________\n" +
                 "FA Menu:\n" +
                 "1. states\n" +
                 "2. alphabet\n" +
                 "3. transitions\n" +
                 "4. initial state\n" +
-                "5. finalStates\n" +
+                "5. final states\n" +
+                "6. check if sequence is accepted\n" +
                 "0. EXIT\n";
     }
 }

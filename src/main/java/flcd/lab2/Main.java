@@ -11,8 +11,22 @@ public class Main {
         System.out.println("APP STARTED..\n");
 
         FA fa = new FA("src/main/java/flcd/lab2/automaton/input/fa.in");
-        FAConsole faConsole = new FAConsole(fa);
-        faConsole.start();
+
+        System.out.println(fa);
+//        System.out.println(fa.isAccepted("aba")); // True
+//        System.out.println(fa.isAccepted("ababbaa")); // True
+//        System.out.println(fa.isAccepted("ababbaaa")); // False
+
+//        FAConsole faConsole = new FAConsole(fa);
+//        faConsole.start();
+
+//        LexicalAnalyser lexicalAnalyser = new LexicalAnalyser("src/main/java/flcd/lab2/input/token.in");
+//        lexicalAnalyser.scanning("p0.txt", "src/main/java/flcd/lab2/input", "src/main/java/flcd/lab2/output");
+//        lexicalAnalyser.scanning("p1.txt", "src/main/java/flcd/lab2/input", "src/main/java/flcd/lab2/output");
+//        lexicalAnalyser.scanning("p2.txt", "src/main/java/flcd/lab2/input", "src/main/java/flcd/lab2/output");
+//        lexicalAnalyser.scanning("p2.txt", "src/main/java/flcd/lab2/input", "src/main/java/flcd/lab2/output");
+//        lexicalAnalyser.scanning("p1err.txt", "src/main/java/flcd/lab2/input", "src/main/java/flcd/lab2/output");
+//        lexicalAnalyser.scanning("p1err2.txt", "src/main/java/flcd/lab2/input", "src/main/java/flcd/lab2/output");
 
         System.out.println("\nAPP STOPPED");
     }

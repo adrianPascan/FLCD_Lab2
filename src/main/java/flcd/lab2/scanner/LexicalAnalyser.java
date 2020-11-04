@@ -1,6 +1,7 @@
 package flcd.lab2.scanner;
 
 import flcd.lab2.PIF.PIF;
+import flcd.lab2.automaton.FA;
 import flcd.lab2.symbolTable.ConstantSymbolTable;
 import flcd.lab2.symbolTable.IdentifierSymbolTable;
 import lombok.Getter;
@@ -16,6 +17,8 @@ public class LexicalAnalyser {
     private IdentifierSymbolTable identifierSymbolTable;
     private ConstantSymbolTable constantSymbolTable;
     private Map<String, Integer> reservedTokenToCode;
+    private FA faIdentifier;
+    private FA faIntConst;
 
     public LexicalAnalyser(String reservedTokenFilePath) {
         pif = null;
@@ -23,6 +26,9 @@ public class LexicalAnalyser {
         constantSymbolTable = null;
 
         reservedTokenToCode = readReservedTokenToCode(reservedTokenFilePath);
+
+        faIdentifier = new FA("src/main/java/flcd/lab2/scanner/input/fa_iden.in");
+        faIntConst = new FA("src/main/java/flcd/lab2/scanner/input/fa_int.in");
     }
 
     public void scanning(String fileName, String programDirectoryPath, String outputDirectoryPath) {
@@ -99,17 +105,23 @@ public class LexicalAnalyser {
         this.constantSymbolTable = constantSymbolTable;
     }
 
-    private static boolean isIdentifier(String token) {
-        return token.matches("[a-zA-Z][a-zA-Z0-9]+");
+    private boolean isIdentifier(String token) {
+        return faIdentifier.isAccepted(token);
+//    old version:
+//        return token.matches("[a-zA-Z][a-zA-Z0-9]+");
     }
 
-    private static boolean isConstant(String token) {
+    private boolean isConstant(String token) {
         // integer constant
-        try {
-            Integer.parseInt(token);
+        if (faIntConst.isAccepted(token)) {
             return true;
-        } catch (NumberFormatException nfe) {
         }
+//    old version:
+//        try {
+//            Integer.parseInt(token);
+//            return true;
+//        } catch (NumberFormatException nfe) {
+//        }
 
         // string constant
         if ( !(token.startsWith("\"") && token.endsWith("\"")) || !token.matches("[a-zA-Z0-9 _.,:;!?'#]*")) {
