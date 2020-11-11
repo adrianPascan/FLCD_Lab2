@@ -65,7 +65,11 @@ public class FAConsole {
         System.out.println("Sequence:");
         String sequence = readLine();
 
-        System.out.println((fa.isAccepted(sequence) ? "" : "NOT ") + "accepted");
+        try {
+            System.out.println((fa.isAccepted(sequence) ? "" : "NOT ") + "accepted");
+        } catch (FAException fae) {
+            System.out.println(fae.getMessage());
+        }
     }
 
     private void exitCommand() {
@@ -88,14 +92,14 @@ public class FAConsole {
     }
 
     private String getMenu() {
-        return "_________________________________\n" +
+        return "________________________________________\n" +
                 "FA Menu:\n" +
                 "1. states\n" +
                 "2. alphabet\n" +
                 "3. transitions\n" +
                 "4. initial state\n" +
                 "5. final states\n" +
-                "6. check if sequence is accepted\n" +
+                "6. check if sequence is accepted by DFA\n" +
                 "0. EXIT\n";
     }
 }

@@ -23,6 +23,7 @@ public class FA {
     private Map<TransitionInput, TransitionOutput> transitions;
     private String initialState;
     private Set<String> finalStates;
+    private boolean deterministic;
 
     public FA() {
         states = new HashSet<>();
@@ -30,6 +31,7 @@ public class FA {
         transitions = new HashMap<>();
         initialState = null;
         finalStates = new HashSet<>();
+        deterministic = false;
     }
 
     public FA(String filePath) {
@@ -99,12 +101,28 @@ public class FA {
             if (!states.containsAll(finalStates)) {
                 throw new FAException("FAException: final states must be a subset of states");
             }
+
+            deterministic = isDeterministic();
         } catch (FileNotFoundException exception) {
             exception.printStackTrace();
         }
     }
 
-    public boolean isAccepted(String sequence) {
+    private boolean isDeterministic() {
+        for (TransitionOutput output:
+             transitions.values()) {
+            if (output != null && output.getStates().size() > 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isAccepted(String sequence) throws FAException {
+        if (!deterministic) {
+            throw new FAException("FAException: non-deterministic FA");
+        }
+
         return isAcceptedRec(initialState, sequence);
     }
 
