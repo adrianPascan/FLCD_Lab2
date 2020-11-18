@@ -70,12 +70,15 @@ public class Grammar {
                 throw new ParserException("ParserException: no data for productions..");
             }
             while(scanner.hasNextLine()) {
-                String[] tokens = scanner.nextLine().trim().split(PRODUCTION_SEPARATOR);
-                ProductionInput input = new ProductionInput(tokens[0].trim());
+                List<String> tokens = Arrays.asList(scanner.nextLine().trim().split(PRODUCTION_SEPARATOR));
+                if (tokens.size() != 2) {
+                    throw new ParserException("ParserException: invalid production: " + tokens);
+                }
 
+                ProductionInput input = new ProductionInput(tokens.get(0).trim());
                 this.productions.putIfAbsent(input, new ArrayList<>());
 
-                List<String> productions = Arrays.asList(tokens[1].trim().split(PRODUCTION_OUTPUT_SEPARATOR));
+                List<String> productions = Arrays.asList(tokens.get(1).trim().split(PRODUCTION_OUTPUT_SEPARATOR));
                 productions.forEach(production -> {
                     List<String> symbols = Arrays.asList(production.trim().split(SEPARATOR));
 

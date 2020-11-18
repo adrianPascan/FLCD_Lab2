@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("APP STARTED..\n");
 
-        Grammar grammar = new Grammar("src/main/java/flcd/lab2/parser/input/parser.in");
+        Grammar grammar = new Grammar("src/main/java/flcd/lab2/parser/input/g1.txt");
 
         GrammarConsole console = new GrammarConsole(grammar);
         console.start();

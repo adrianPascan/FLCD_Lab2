@@ -51,7 +51,7 @@ public class GrammarConsole {
         List<ProductionOutput> outputs = grammar.getProductions().get(input);
 
         if (outputs == null) {
-            System.out.println("No productions for '" + nonterminal + "'");
+            System.out.println("No productions for '" + nonterminal + "'..");
         }
         else {
             System.out.println(nonterminal + "->");
