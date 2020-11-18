@@ -9,5 +9,5 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class ProductionInput {
-    private String state;
+    private String nonterminal;
 }

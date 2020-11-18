@@ -53,8 +53,8 @@ public class Grammar {
             if (!scanner.hasNextLine()) {
                 throw new ParserException("ParserException: no data for terminals, start symbol, productions..");
             }
-            List<String> symbols = Arrays.asList(scanner.nextLine().split(SEPARATOR));
-            this.terminals.addAll(symbols);
+            List<String> terminals = Arrays.asList(scanner.nextLine().split(SEPARATOR));
+            this.terminals.addAll(terminals);
 
             // start symbol
             if (!scanner.hasNextLine()) {
@@ -70,17 +70,23 @@ public class Grammar {
                 throw new ParserException("ParserException: no data for productions..");
             }
             while(scanner.hasNextLine()) {
-                String[] tokens = scanner.nextLine().strip().split(PRODUCTION_SEPARATOR);
-                ProductionInput input = new ProductionInput(tokens[0].strip());
+                String[] tokens = scanner.nextLine().trim().split(PRODUCTION_SEPARATOR);
+                ProductionInput input = new ProductionInput(tokens[0].trim());
 
-                productions.put(input, new ArrayList<>());
+                this.productions.putIfAbsent(input, new ArrayList<>());
 
-                List<String> prods = Arrays.asList(tokens[1].strip().split(PRODUCTION_OUTPUT_SEPARATOR));
-                prods.forEach(production -> {
-                    String[] parameters = production.strip().split(SEPARATOR);
+                List<String> productions = Arrays.asList(tokens[1].trim().split(PRODUCTION_OUTPUT_SEPARATOR));
+                productions.forEach(production -> {
+                    List<String> symbols = Arrays.asList(production.trim().split(SEPARATOR));
 
-                    ProductionOutput output = new ProductionOutput(Arrays.asList(production.split(SEPARATOR)));
-                    productions.get(input).add(output);
+                    symbols.forEach(symbol -> {
+                        if (! (nonterminals.contains(symbol) || terminals.contains(symbol))) {
+                            throw new ParserException("ParserException: " + symbol + " is neither a nonterminal or termminal in production '" + production + "'..");
+                        }
+                    });
+
+                    ProductionOutput output = new ProductionOutput(symbols);
+                    this.productions.get(input).add(output);
                 });
 
             }

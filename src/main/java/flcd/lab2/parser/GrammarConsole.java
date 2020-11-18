@@ -1,6 +1,7 @@
 package flcd.lab2.parser;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -43,16 +44,20 @@ public class GrammarConsole {
     }
 
     private void productionsCommand() {
-        System.out.println("Symbol:");
-        String symbol = readLine();
+        System.out.println("Nonterminal:");
+        String nonterminal = readLine();
 
-        grammar.getProductions().forEach((productionInput, productionOutput) -> {
-            System.out.println(productionInput.getState() + " ->");
+        ProductionInput input = new ProductionInput(nonterminal);
+        List<ProductionOutput> outputs = grammar.getProductions().get(input);
 
-            productionOutput.forEach(output -> {
-                System.out.println(output.getSymbols());
-            });
-        });
+        if (outputs == null) {
+            System.out.println("No productions for '" + nonterminal + "'");
+        }
+        else {
+            System.out.println(nonterminal + "->");
+
+            outputs.forEach(output -> System.out.println("\t" + output.getSymbols()));
+        }
     }
 
     private void startSymbolCommand() {
